@@ -186,6 +186,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\DBInitializer.cs" />
     <Compile Include="Models\Mongo\Models\Category.cs" />
     <Compile Include="Models\Mongo\Models\Dish.cs" />
     <Compile Include="Models\Mongo\Models\Location.cs" />

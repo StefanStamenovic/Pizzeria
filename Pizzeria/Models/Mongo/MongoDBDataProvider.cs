@@ -21,36 +21,17 @@ namespace Pizzeria.Models.Mongo
             database = client.GetDatabase(dbName);
         }
 
-        #region Dish
-
-        public void DishCreate(string name, string description, int price, string category)
-        {
-            if (CategoryGet(category) == null)
-                return;
-            IMongoCollection<Category> collection = database.GetCollection<Category>("categories");
-            Dish dish = new Dish
-            {
-                name = name,
-                description = description,
-                price = price
-            };
-            FilterDefinition<Category> filter = Builders<Category>.Filter.Eq("name", category);
-            UpdateDefinition<Category> update = Builders<Category>.Update.AddToSet("dishes", dish);
-            collection.UpdateOne(filter, update);
-        }
-
-        #endregion
 
         #region Category
 
-        public void CategoryCreate(string name, string imageurl)
+        public void CategoryCreate(string name)
         {
             IMongoCollection<Category> collection=database.GetCollection<Category>("categories");
-            Category category = new Category{
+            Category category = new Category {
+                id = new ObjectId(),
                 name = name,
-                imageUrl = imageurl,
-                dishes = null,
-                supplements = null
+                dishes = new List<Dish>(),
+                supplements = new List<Supplement>()
             };
             collection.InsertOne(category);
         }
@@ -70,24 +51,64 @@ namespace Pizzeria.Models.Mongo
             return categories;
         }
 
+        #region Dish
+        public void CategoryDishCreate(string name, string description, int price, string category)
+        {
+            if (CategoryGet(category) == null)
+                return;
+            IMongoCollection<Category> collection = database.GetCollection<Category>("categories");
+            Dish dish = new Dish
+            {
+                id = new ObjectId(),
+                name = name,
+                description = description,
+                price = price
+            };
+            FilterDefinition<Category> filter = Builders<Category>.Filter.Eq("name", category);
+            UpdateDefinition<Category> update = Builders<Category>.Update.Push("dishes", dish);
+            collection.FindOneAndUpdate(filter, update);
+        }
+
+        public void CategoryDishRemove(string name, string category)
+        {
+            if (CategoryGet(category) == null)
+                return;
+            IMongoCollection<Category> collection = database.GetCollection<Category>("categories");
+            FilterDefinition<Category> filter = Builders<Category>.Filter.Eq("name", category);
+            UpdateDefinition<Category> update = Builders<Category>.Update.PullFilter("dishes", Builders<Dish>.Filter.Eq("name", name));
+            collection.FindOneAndUpdate(filter, update);
+        }
+
         #endregion
 
         #region Supplement
-
-        public void SupplementCreate(string name, int price, string category)
+        public void CategorySupplementCreate(string name, int price, string category)
         {
             if (CategoryGet(category) == null)
                 return;
             IMongoCollection<Category> collection = database.GetCollection<Category>("categories");
             Supplement supplement = new Supplement
             {
+                id = new ObjectId(),
                 name = name,
                 price = price
             };
             FilterDefinition<Category> filter = Builders<Category>.Filter.Eq("name", category);
-            UpdateDefinition<Category> update = Builders<Category>.Update.AddToSet("supplements", supplement);
-            collection.UpdateOne(filter, update);
+            UpdateDefinition<Category> update = Builders<Category>.Update.Push("supplements", supplement);
+            collection.FindOneAndUpdate(filter, update);
         }
+
+        public void CategorySupplementRemove(string name, string category)
+        {
+            if (CategoryGet(category) == null)
+                return;
+            IMongoCollection<Category> collection = database.GetCollection<Category>("categories");
+            FilterDefinition<Category> filter = Builders<Category>.Filter.Eq("name", category);
+            UpdateDefinition<Category> update = Builders<Category>.Update.PullFilter("supplements", Builders<Supplement>.Filter.Eq("name", name));
+            collection.FindOneAndUpdate(filter, update);
+        }
+
+        #endregion
 
         #endregion
 
@@ -102,20 +123,41 @@ namespace Pizzeria.Models.Mongo
 
         #region Order
 
-        public void OrderCreate(string name, string adress, string phone, string price, string date, Location location)
+        public void OrderCreate(string name, string adress, string phone, string price, string date, Location location,List<OrderedDish> orderedDish)
         {
+            IMongoCollection<Order> collection = database.GetCollection<Order>("orders");
+            Order order = new Order
+            {
+                name = name,
+                adress = adress,
+                phone = phone,
+                price = price,
+                date = date,
+                location = location,
+                orderedDish = orderedDish
+            };
+            collection.InsertOne(order);
+        }
 
+        public List<Order> OrderGetAll()
+        {
+            IMongoCollection<Order> collection = database.GetCollection<Order>("oreders");
+            List<Order> orders = collection.Find<Order>(new BsonDocument()).ToList<Order>();
+            return orders;
+        }
+
+        public void OrderDelete(ObjectId id)
+        {
+            IMongoCollection<Order> collection = database.GetCollection<Order>("orders");
+            collection.DeleteOne(x => x.id == id);
         }
 
         #endregion
 
-
-        public void Initialize()
+        public void DeleteAllData()
         {
-            database.CreateCollection("dishes");
-            database.CreateCollection("supplements");
+            database.DropCollection("categories");
+            database.DropCollection("orders");
         }
-
-
     }
 }

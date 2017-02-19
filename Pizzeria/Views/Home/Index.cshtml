@@ -12,10 +12,46 @@
         <div class="list-group">
             @foreach (Category category in Model.categories)
             {
-                <a href="#" class="list-group-item h2" data-toggle="collapse" data-target="#@category.name"> @category.name</a>
+                <a href="#" class="list-group-item h2 clearfix" data-toggle="collapse" data-target="#@category.name"> @category.name </a>
                         <div id="@category.name" class="sublinks collapse">
                             <div class="list-group-item">
-                                djsljglsdfg
+                                @if (category.dishes != null)
+                                {
+                                    foreach (Dish dish in category.dishes)
+                                    {
+                                        <a href="#" class="list-group-item h2" data-toggle="collapse" data-target="#@dish.name.Replace(" ", String.Empty)"> @dish.name</a>
+                                        <div id="@dish.name.Replace(" ", String.Empty)" class="sublinks collapse">
+                                            <div class="list-group-item">
+                                                <form class="form-horizontal">
+                                                    <fieldset>
+                                                        <div class="form-group">
+                                                            <div class="col-lg-4 col-lg-offset-1">
+                                                                <select class="form-control" id="select">
+                                                                    <option>1</option>
+                                                                    <option>2</option>
+                                                                    <option>3</option>
+                                                                    <option>4</option>
+                                                                    <option>5</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-lg-4 col-lg-offset-3">
+                                                                <button type="submit" class="btn btn-primary">Add to cart</button>
+                                                            </div>
+                                                            <div class="col-lg-10">
+                                                                @foreach (Supplement supplement in category.supplements)
+                                                                {
+                                                                    <label>
+                                                                        <input type="checkbox" name="@supplement.name" value="@supplement.name"> @supplement.name - Price: @supplement.price
+                                                                    </label>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    }
+                                }
                             </div>
                         </div>
             }
@@ -26,7 +62,19 @@
         <div class="panel panel-info">
             <div class="panel-heading">Order</div>
             <div class="panel-body">
-                
+                <ul class="list-group">
+                    <li class="list-group-item clearfix">
+                        <h6 class="pull-left">narudzbina</h6>
+                        <div class="pull-right">
+                            <a href="#" data-toggle="modal" class="btn btn-default">X</a>
+                        </div>
+                    </li>
+                </ul>
+                <hr />
+                <h4 class="pull-left">Cena</h4>
+                <div class="pull-right">
+                    <a href="#" data-toggle="modal" class="btn btn-default">Order</a>
+                </div>
             </div>
         </div>
     </div>

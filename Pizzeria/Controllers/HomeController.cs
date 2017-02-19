@@ -1,4 +1,5 @@
-﻿using Pizzeria.Models.Mongo;
+﻿using Pizzeria.Models;
+using Pizzeria.Models.Mongo;
 using Pizzeria.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,11 @@ namespace Pizzeria.Controllers
         {
             MongoDBDataProvider provider = new MongoDBDataProvider();
             HomeViewModel model = new HomeViewModel();
+
+            DBInitializer initializer = new DBInitializer();
+            initializer.DeleteAllData();
+            initializer.Initialize();
+
             model.categories = provider.CategoryGetAll();
             return View(model);
         }

@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.IdGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Pizzeria.Models.Mongo.Models
 {
     public class Order
     {
-        [BsonId]
+        [BsonId(IdGenerator = typeof(ObjectIdGenerator))]
         public ObjectId id { get; set; }
 
         [BsonElement("name")]
@@ -29,5 +30,8 @@ namespace Pizzeria.Models.Mongo.Models
 
         [BsonElement("location")]
         public Location location { get; set; }
+
+        [BsonElement("orderedDish")]
+        public List<OrderedDish> orderedDish { get; set; }
     }
 }
