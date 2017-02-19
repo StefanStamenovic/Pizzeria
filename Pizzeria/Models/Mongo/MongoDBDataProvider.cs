@@ -112,18 +112,9 @@ namespace Pizzeria.Models.Mongo
 
         #endregion
 
-        #region Location
-
-        public void LocationCreate(string name)
-        {
-
-        }
-
-        #endregion
-
         #region Order
 
-        public void OrderCreate(string name, string adress, string phone, string price, string date, Location location,List<OrderedDish> orderedDish)
+        public void OrderCreate(string name, string adress, string phone, string price, string date,List<OrderedDish> orderedDish)
         {
             IMongoCollection<Order> collection = database.GetCollection<Order>("orders");
             Order order = new Order
@@ -133,7 +124,6 @@ namespace Pizzeria.Models.Mongo
                 phone = phone,
                 price = price,
                 date = date,
-                location = location,
                 orderedDish = orderedDish
             };
             collection.InsertOne(order);
@@ -152,12 +142,63 @@ namespace Pizzeria.Models.Mongo
             collection.DeleteOne(x => x.id == id);
         }
 
+        public Order OrderGet(ObjectId id)
+        {
+            IMongoCollection<Order> collection = database.GetCollection<Order>("orders");
+            Order order = collection.Find<Order>(x => x.id == id).SingleOrDefault<Order>();
+            return order;
+        }
+
+        #endregion
+
+        #region Deliverer
+
+        public void DelivererCreate(string name)
+        {
+            IMongoCollection<Deliverer> collection = database.GetCollection<Deliverer>("deliverers");
+            Deliverer deliverer = new Deliverer
+            {
+                name = name,
+                ordersIds = new List<ObjectId>(),
+                available = true
+            };
+            collection.InsertOne(deliverer);
+        }
+
+        public List<Deliverer> DelivererGetAll()
+        {
+            IMongoCollection<Deliverer> collection = database.GetCollection<Deliverer>("deliverers");
+            List<Deliverer> deliverers = collection.Find<Deliverer>(new BsonDocument()).ToList<Deliverer>();
+            foreach(Deliverer deliverer in deliverers)
+            {
+                deliverer.orders = new List<Order>();
+                foreach(ObjectId id in deliverer.ordersIds)
+                {
+                    Order oreder = OrderGet(id);
+                    if (id != null)
+                        deliverer.orders.Add(oreder);
+                }
+            }
+            return deliverers;
+        }
+
+        public void DelivererAssignDeliverer(ObjectId order, ObjectId deliverer)
+        {
+
+        }
+
+        public void DelivererSetActive(ObjectId deliverer)
+        {
+
+        }
+
         #endregion
 
         public void DeleteAllData()
         {
             database.DropCollection("categories");
             database.DropCollection("orders");
+            database.DropCollection("deliverers");
         }
     }
 }

@@ -9,5 +9,6 @@ namespace Pizzeria.Models.ViewModels
     public class ManagementViewModel
     {
         public List<Order> orders { get; set; }
+        public List<Deliverer> deliverers;
     }
 }

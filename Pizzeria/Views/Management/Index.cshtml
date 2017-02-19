@@ -3,36 +3,95 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Menagement Page";
+    String supptext = "support";
+    String style;
 }
 
 <div class="row">
     <div class="col-md-8">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#orders" data-toggle="tab" aria-expanded="true">Orders</a></li>
-            <li class=""><a href="#categories" data-toggle="tab" aria-expanded="false">Categories</a></li>
+            <li class=""><a href="#deliverers" data-toggle="tab" aria-expanded="false">Deliverers</a></li>
         </ul>
         <div id="myTabContent" class="tab-content">
             <div class="tab-pane fade active in" id="orders">
                 <div class="panel-body" style="padding: 0px;">
-                    <ul class="list-group">
-                                                @foreach (Order order in Model.orders)
-                                                {
-                                                    <li class="list-group-item clearfix">
-                                                        <div class="h4 link pull-left" style="text-decoration: none;">@order.name</div>
-                                                        <div class="pull-right">
-                                                            <a href="#" class="btn btn-default">Delete</a>
+                    <div class="list-group">
+                        @foreach (Order order in Model.orders)
+                        {
+                            if (order.deliverer == null)
+                            {
+                                style = "";
+                            }
+                            else
+                            {
+                                style = "style=background-color:lightcyan;";
+                            }
+                            <div class="list-group-item clearfix" @style>
+                                <div class="col-lg-10" data-toggle="collapse" data-target="#@order.id">
+                                    <div class="col-lg-8" style="text-decoration: none;">
+                                        <div class="h4"> @order.name</div>
+                                        <div> @order.adress</div>
+                                        <div> @order.phone</div>
+                                    </div>
+                                    <div class="col-lg-4" style="vertical-align:central;margin-top:20px;">
+                                        <h4>Price: @order.price</h4>
+                                    </div>
+                                </div>
+                                <div class="pull-right" style="vertical-align:central;margin-top:20px;">
+                                    <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Delete</a>
+                                </div>
+                            </div>
+                            <div id="@order.id" class="sublinks collapse">
+                                <div>
+                                    
+                                    <div class="panel panel-default" style="margin-bottom:0px;padding-bottom:0px;">
+                                        <div class="panel-heading">Dishes</div>
+                                        <div class="panel-body" style=" padding-top:0px;">
+                                            @foreach (OrderedDish orderedDish in order.orderedDish)
+                                            {
+                                                <ul class="list-group" style="margin-left:-15px;margin-right:-15px;">
+                                                    <li class="list-group-item clearfix" style="padding:0px; margin-top:0px;">
+                                                        <div class="col-lg-12 clearfix" style="padding:0px;">
+                                                            <div class="col-lg-12" style="padding:0px;">
+                                                                <div class="col-lg-12 clearfix h3" style="text-decoration:none;text;border-bottom:solid 1px #e7e7e7;margin:0px;padding-bottom:10px;padding-top:10px;vertical-align:central;">@orderedDish.dish.name <span class="pull-right" style="margin-right:10px;">x @orderedDish.quantity</span></div>
+                                                                @if (@orderedDish.supplements.Count > 0)
+                                                                {
+                                                                    <div class="col-lg-12" style="padding:0px;">
+                                                                        @foreach (Supplement supplement in orderedDish.supplements)
+                                                                        {
+                                                                            <div class="col-lg-12" style="background-color:#fafafa;border-bottom:solid 1px #e7e7e7;">
+                                                                                <p>@supplement.name</p>
+                                                                            </div>
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                            </div>
                                                         </div>
                                                     </li>
+                                                </ul>
+                                                if (order.deliverer == null)
+                                                {
+                                                    <div class="pull-right" style="vertical-align:central;margin-top:-10px;">
+                                                        <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Deliverer</a>
+                                                    </div>
                                                 }
+                                            }
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
                         @if (Model.orders.Count < 1)
                         {
                             <hr />
                             <h4 class="text-muted">There is no orders.</h4>
                         }
-                    </ul>
+                    </div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="categories">
+            <div class="tab-pane fade" id="deliverers">
                 <div class="panel-body" style="padding: 0px;">
                     <div class="clearfix" style="margin: 5px;">
                         <div class="pull-right">
@@ -64,13 +123,6 @@
                     </li>
                     <li class="list-group-item clearfix">
                         <h4 class="pull-left">Supplement</h4>
-                        <div class="pull-right">
-                            <a href="#addGenreModal" data-toggle="modal" class="btn btn-default">Add</a>
-                            <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Delete</a>
-                        </div>
-                    </li>
-                    <li class="list-group-item clearfix">
-                        <h4 class="pull-left">Location</h4>
                         <div class="pull-right">
                             <a href="#addGenreModal" data-toggle="modal" class="btn btn-default">Add</a>
                             <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Delete</a>

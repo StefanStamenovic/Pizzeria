@@ -1,4 +1,5 @@
-﻿using Pizzeria.Models.Mongo;
+﻿using MongoDB.Bson;
+using Pizzeria.Models.Mongo;
 using Pizzeria.Models.Mongo.Models;
 using System;
 using System.Collections.Generic;
@@ -96,10 +97,11 @@ namespace Pizzeria.Models
                         Supplement supplement = new Supplement();
                         supplement.name = stream.ReadLine();
                         supplement.price = Convert.ToInt32(stream.ReadLine());
+                        supplements.Add(supplement);
                     }
                     orderDish.supplements = supplements;
                     order.orderedDish = new List<OrderedDish> { orderDish};
-                    dbMongo.OrderCreate(order.name,order.adress,order.phone,order.price,date,null,order.orderedDish);
+                    dbMongo.OrderCreate(order.name,order.adress,order.phone,order.price,date,order.orderedDish);
                 }
                 stream.Close();
             }
@@ -107,7 +109,9 @@ namespace Pizzeria.Models
             {
 
             }
-
+            dbMongo.DelivererCreate("Piter Parker");
+            dbMongo.DelivererCreate("Tony Stark");
+            dbMongo.DelivererCreate("Bruce Wayne");
         }
 
         public void DeleteAllData()

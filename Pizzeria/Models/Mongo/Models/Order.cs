@@ -28,8 +28,8 @@ namespace Pizzeria.Models.Mongo.Models
         [BsonElement("date")]
         public string date { get; set; }
 
-        [BsonElement("location")]
-        public Location location { get; set; }
+        [BsonElement("deliverer")]
+        public Deliverer deliverer { get; set; }
 
         [BsonElement("orderedDish")]
         public List<OrderedDish> orderedDish { get; set; }

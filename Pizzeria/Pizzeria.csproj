@@ -188,8 +188,8 @@
     </Compile>
     <Compile Include="Models\DBInitializer.cs" />
     <Compile Include="Models\Mongo\Models\Category.cs" />
+    <Compile Include="Models\Mongo\Models\Deliverer.cs" />
     <Compile Include="Models\Mongo\Models\Dish.cs" />
-    <Compile Include="Models\Mongo\Models\Location.cs" />
     <Compile Include="Models\Mongo\Models\Order.cs" />
     <Compile Include="Models\Mongo\Models\OrderedDish.cs" />
     <Compile Include="Models\Mongo\Models\Supplement.cs" />

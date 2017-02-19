@@ -8,12 +8,21 @@ using System.Web;
 
 namespace Pizzeria.Models.Mongo.Models
 {
-    public class Location
+    public class Deliverer
     {
         [BsonId(IdGenerator = typeof(ObjectIdGenerator))]
         public ObjectId id { get; set; }
 
         [BsonElement("name")]
         public string name { get; set; }
+
+        [BsonElement("available")]
+        public bool available { get; set; }
+
+        [BsonElement("orders")]
+        public List<ObjectId> ordersIds { get; set; }
+
+        [BsonIgnore]
+        public List<Order> orders { get; set; }
     }
 }
