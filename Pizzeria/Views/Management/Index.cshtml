@@ -38,9 +38,12 @@
                                         <h4>Price: @order.price</h4>
                                     </div>
                                 </div>
-                                <div class="pull-right" style="vertical-align:central;margin-top:20px;">
-                                    <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Delete</a>
-                                </div>
+                                @if(@order.deliverer == null)
+                                {
+                                    <div class="pull-right" style="vertical-align:central;margin-top:20px;">
+                                        <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Delete</a>
+                                    </div>
+                                }
                             </div>
                             <div id="@order.id" class="sublinks collapse">
                                 <div>
