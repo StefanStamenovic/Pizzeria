@@ -12,7 +12,7 @@ namespace Pizzeria.Models
     public class DBInitializer
     {
         string categoryFilePath = @"~/category.txt";
-
+        string orderFilePath = @"~/orders.txt";
         public DBInitializer()
         {
         }
@@ -64,6 +64,42 @@ namespace Pizzeria.Models
                         dbMongo.CategoryDishCreate(dish.name, dish.description, dish.price, category.name);
                     foreach (Supplement supplement in category.supplements)
                         dbMongo.CategorySupplementCreate(supplement.name, supplement.price, category.name);
+                }
+                stream.Close();
+            }
+            catch (Exception e)
+            {
+
+            }
+
+            try
+            {
+                stream = new StreamReader(HostingEnvironment.MapPath(orderFilePath));
+                while (!stream.EndOfStream)
+                {
+                    Order order = new Order();
+                    order.name = stream.ReadLine();
+                    order.adress = stream.ReadLine();
+                    order.phone = stream.ReadLine();
+                    order.price = stream.ReadLine();
+                    OrderedDish orderDish = new OrderedDish();
+                    Dish dish = new Dish();
+                    dish.name = stream.ReadLine();
+                    dish.description = stream.ReadLine();
+                    dish.price = Convert.ToInt32(stream.ReadLine());
+                    orderDish.dish = dish;
+                    orderDish.quantity= Convert.ToInt32(stream.ReadLine());
+                    int numofsupplements= Convert.ToInt32(stream.ReadLine());
+                    List<Supplement> supplements = new List<Supplement>();
+                    for(int i=0;i<numofsupplements;i++)
+                    {
+                        Supplement supplement = new Supplement();
+                        supplement.name = stream.ReadLine();
+                        supplement.price = Convert.ToInt32(stream.ReadLine());
+                    }
+                    orderDish.supplements = supplements;
+                    order.orderedDish = new List<OrderedDish> { orderDish};
+                    dbMongo.OrderCreate(order.name,order.adress,order.phone,order.price,date,null,order.orderedDish);
                 }
                 stream.Close();
             }

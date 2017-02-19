@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Pizzeria.Models.Mongo;
+using Pizzeria.Models.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,7 +13,11 @@ namespace Pizzeria.Controllers
         // GET: Management
         public ActionResult Index()
         {
-            return View();
+            MongoDBDataProvider provider = new MongoDBDataProvider();
+            ManagementViewModel model = new ManagementViewModel();
+
+            model.orders = provider.OrderGetAll();
+            return View(model);
         }
     }
 }

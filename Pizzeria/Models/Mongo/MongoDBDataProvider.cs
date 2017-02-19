@@ -141,7 +141,7 @@ namespace Pizzeria.Models.Mongo
 
         public List<Order> OrderGetAll()
         {
-            IMongoCollection<Order> collection = database.GetCollection<Order>("oreders");
+            IMongoCollection<Order> collection = database.GetCollection<Order>("orders");
             List<Order> orders = collection.Find<Order>(new BsonDocument()).ToList<Order>();
             return orders;
         }
