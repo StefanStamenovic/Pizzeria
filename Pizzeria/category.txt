@@ -1,0 +1,70 @@
+Pizza
+slika
+4
+Margherita
+Ingredients - tomato sauce, mozzarella.
+300
+Funghi
+Ingredients - tomato sauce, mozzarella, mushrooms.
+350
+Capricciosa
+Ingredients - tomato sauce, mozzarella, mushrooms, ham, eggs, artichoke, cocktail sausages, green olives
+400
+Quattro Stagioni
+Ingredients - tomato sauce, mozzarella, ham, black olives, mushrooms, artichoke, peas, salami, eggs.
+500
+3
+Egg
+30
+Papper
+40
+Cheese
+50
+Pasta
+slika
+4
+Pasta al ceppo
+A sheet pasta that is similar in shape to a cinnamon stick
+150
+Penne
+Medium length tubes with ridges, cut diagonally at both ends
+180
+Penne rigate
+Penne with ridged sides
+200
+Rotini
+Related to fusilli, but has a tighter helix, i.e. with a smaller pitch
+250
+3
+Egg
+30
+Papper
+40
+Cheese
+50
+Sandwich
+slika
+3
+Cheeseburger
+Meat patty on a roll with cheese, often served with lettuce, tomato, pickles, and other toppings
+150
+Ham and cheese sandwich
+Ham and cheese, often on white bread
+100
+Hamburger
+One or more cooked patties of ground meat, usually beef, placed inside a sliced bread roll or bun, often served with cheese, lettuce, tomato, bacon, onion, pickles, and condiments such as mustard, mayonnaise, ketchup, relish, and chiles
+250
+0
+Salad
+slika
+3
+Tuna salad
+Fish salad
+200
+Urnebes
+Cheese salad
+150
+Olivier salad
+Diced potato, hard boiled eggs, green peas, pickles, meat (sometimes fish or seafood), with mayonnaise.
+250
+0
