@@ -5,9 +5,17 @@ Vozda Karadjordja 17a
 43.320836
 21.899278
 Crveni Krst
-0
+1
+Pizzeria Elfak
+Aleksandra Medvedeva 14b
+43.3308884
+21.8920404
 Pantelej
-0
+1
+Pizzeria Oridjinale
+Somborska 89
+43.3340362
+21.9165817
 Palilula
 2
 Pizzeria Rampa
@@ -19,4 +27,8 @@ Stanoja Glavasa 39
 43.3072445
 21.9006856
 Niska Banja
-0
+1
+Pizzeria Cele Kula
+Bulevar Svetog cara Konstantina 74
+43.3101915
+21.9362637
