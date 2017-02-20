@@ -11,5 +11,6 @@ namespace Pizzeria.Models.ViewModels
         public string adress { get; set; }
         public string phone { get; set; }
         public string price { get; set; }
+        public string district { get; set; }
     }
 }

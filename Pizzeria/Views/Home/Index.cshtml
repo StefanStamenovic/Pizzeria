@@ -94,6 +94,17 @@
                                     <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone" />
                                 </div>
                             </div>
+                            <div class="col-lg-12">
+                                <label class="col-lg-2 control-label">District</label>
+                                <div class="col-lg-9">
+                                    <select class="form-control" name="district">
+                                        @foreach (var item in Model.districts)
+                                        {
+                                            <option>@item.name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div>
                             <button type="submit" class="btn btn-default">Order</button>
@@ -117,5 +128,52 @@
                 </form>
             </div>
         </div>
+        <div id="map">
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">Restaurants</div>
+            <div class="panel-body">
+                <ul class="list-group" style="margin-left:-10px;margin-right:-10px;">
+                    @for (int i = 0, k = 65; i < @Model.districts.Count; i++)
+                    {
+                        for (int j = 0; j < Model.districts[i].restaurants.Count; j++)
+                        {
+                            <li class="list-group-item clearfix" style="padding:0px; margin-top:0px;">
+                                @Char.ConvertFromUtf32(k++): @Model.districts[i].restaurants[j].name
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+        @for (int i = 0; i < @Model.districts.Count; i++)
+        {
+            for (int j = 0; j < Model.districts[i].restaurants.Count; j++)
+            {
+                <div data-marker="@Json.Encode(Model.districts[i].restaurants[j])"></div>
+            }
+        }
     </div>
+   
+
 </div>
+@section JavaScript
+{
+    <script type="text/javascript" src="@Url.Content("/Scripts/cart.js")"></script>
+    <script>
+        function initMap() {
+            var center = { lat: 43.3199996, lng: 21.8998299 }; 
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 13,
+                center: center
+            });
+
+            setupMap(map);
+
+        }
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgro-K3tEZwMWIQu43SvYb9GpDqQcp0y4&callback=initMap">
+    </script>
+}
+

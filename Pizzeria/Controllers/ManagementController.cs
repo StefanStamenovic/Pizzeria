@@ -22,5 +22,26 @@ namespace Pizzeria.Controllers
             model.categories = provider.CategoryGetAll();
             return View(model);
         }
+
+        [HttpGet]
+        public ActionResult DeleteOrder(string id)
+        {
+            MongoDBDataProvider provider = new MongoDBDataProvider();
+            provider.OrderDelete(new MongoDB.Bson.ObjectId(id));
+            return Redirect("/Management");
+        }
+
+        public ActionResult CreateSupplement(string category, string name, int price)
+        {
+            MongoDBDataProvider provider = new MongoDBDataProvider();
+            provider.CategorySupplementCreate(name, price, category);
+            return Redirect("/Management");
+        }
+        public ActionResult DeleteSupplement(string category, string name)
+        {
+            MongoDBDataProvider provider = new MongoDBDataProvider();
+            provider.CategorySupplementRemove(name, category);
+            return Redirect("/Management");
+        }
     }
 }

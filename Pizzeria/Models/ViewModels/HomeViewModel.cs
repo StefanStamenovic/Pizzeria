@@ -9,5 +9,6 @@ namespace Pizzeria.Models.ViewModels
     public class HomeViewModel
     {
         public List<Category> categories { get; set; }
+        public List<District> districts { get; set; }
     }
 }

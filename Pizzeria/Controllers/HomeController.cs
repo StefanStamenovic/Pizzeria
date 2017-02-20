@@ -20,10 +20,11 @@ namespace Pizzeria.Controllers
             HomeViewModel model = new HomeViewModel();
 
             DBInitializer initializer = new DBInitializer();
-            initializer.DeleteAllData();
+            //initializer.DeleteAllData();
             initializer.Initialize();
 
             model.categories = provider.CategoryGetAll();
+            model.districts = provider.DistrictGetAll();
             return View(model);
         }
 
@@ -32,7 +33,9 @@ namespace Pizzeria.Controllers
         {
             MongoDBDataProvider provider = new MongoDBDataProvider();
             List<OrderedDish> cart = (List<OrderedDish>)Session["Cart"];
-            provider.OrderCreate(form.name, form.adress, form.phone, form.price, DateTime.Now.ToString("dd-MM-yyyy"), cart);
+            List<Restaurant> restaurants = provider.DistrictGet(form.district).restaurants;
+            Restaurant restaurant = restaurants.ElementAt(new Random().Next() % restaurants.Count);
+            provider.OrderCreate(form.name, form.adress, form.phone, form.price, DateTime.Now.ToString("dd-MM-yyyy"), restaurant.id, cart);
             cart.RemoveRange(0, cart.Count);
             return new HttpStatusCodeResult(200);
         }

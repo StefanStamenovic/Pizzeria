@@ -14,6 +14,7 @@ namespace Pizzeria.Models
     {
         string categoryFilePath = @"~/category.txt";
         string orderFilePath = @"~/orders.txt";
+        string districtFilePath = @"~/districts.txt";
         public DBInitializer()
         {
         }
@@ -73,6 +74,39 @@ namespace Pizzeria.Models
 
             }
 
+           
+
+            try
+            {
+                stream = new StreamReader(HostingEnvironment.MapPath(districtFilePath));
+                while (!stream.EndOfStream)
+                {
+                    District district = new District();
+                    district.name = stream.ReadLine();
+                    int numofRestaurants = Convert.ToInt32(stream.ReadLine());
+                    district.restaurants = new List<Restaurant>();
+                    for (int i = 0; i < numofRestaurants; i++)
+                    {
+                        Restaurant restaurant = new Restaurant();
+                        restaurant.name = stream.ReadLine();
+                        restaurant.address = stream.ReadLine();
+                        restaurant.coordinates = new double[2];
+                        restaurant.coordinates[0] = Convert.ToDouble(stream.ReadLine());
+                        restaurant.coordinates[1] = Convert.ToDouble(stream.ReadLine());
+                        district.restaurants.Add(restaurant);
+                    } 
+                    dbMongo.DistrictCreate(district);
+                }
+                stream.Close();
+            }
+            catch (Exception e)
+            {
+
+            }
+            dbMongo.DelivererCreate("Piter Parker");
+            dbMongo.DelivererCreate("Tony Stark");
+            dbMongo.DelivererCreate("Bruce Wayne");
+
             try
             {
                 stream = new StreamReader(HostingEnvironment.MapPath(orderFilePath));
@@ -89,10 +123,10 @@ namespace Pizzeria.Models
                     dish.description = stream.ReadLine();
                     dish.price = Convert.ToInt32(stream.ReadLine());
                     orderDish.dish = dish;
-                    orderDish.quantity= Convert.ToInt32(stream.ReadLine());
-                    int numofsupplements= Convert.ToInt32(stream.ReadLine());
+                    orderDish.quantity = Convert.ToInt32(stream.ReadLine());
+                    int numofsupplements = Convert.ToInt32(stream.ReadLine());
                     List<Supplement> supplements = new List<Supplement>();
-                    for(int i=0;i<numofsupplements;i++)
+                    for (int i = 0; i < numofsupplements; i++)
                     {
                         Supplement supplement = new Supplement();
                         supplement.name = stream.ReadLine();
@@ -100,8 +134,10 @@ namespace Pizzeria.Models
                         supplements.Add(supplement);
                     }
                     orderDish.supplements = supplements;
-                    order.orderedDish = new List<OrderedDish> { orderDish};
-                    dbMongo.OrderCreate(order.name,order.adress,order.phone,order.price,date,order.orderedDish);
+                    order.orderedDish = new List<OrderedDish> { orderDish };
+                    List<Restaurant> restaurants = dbMongo.DistrictGet("Palilula").restaurants;
+                    Restaurant restaurant = restaurants.ElementAt(new Random().Next() % restaurants.Count);
+                    dbMongo.OrderCreate(order.name, order.adress, order.phone, order.price, date, restaurant.id, order.orderedDish);
                 }
                 stream.Close();
             }
@@ -109,9 +145,6 @@ namespace Pizzeria.Models
             {
 
             }
-            dbMongo.DelivererCreate("Piter Parker");
-            dbMongo.DelivererCreate("Tony Stark");
-            dbMongo.DelivererCreate("Bruce Wayne");
         }
 
         public void DeleteAllData()

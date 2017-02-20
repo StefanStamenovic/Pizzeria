@@ -1,0 +1,22 @@
+Medijana
+1
+Pizzeria Centar
+Vozda Karadjordja 17a
+43.320836
+21.899278
+Crveni Krst
+0
+Pantelej
+0
+Palilula
+2
+Pizzeria Rampa
+Episkopska 34a
+43.3128704
+21.8985183
+Pizzeria Brdo
+Stanoja Glavasa 39
+43.3072445
+21.9006856
+Niska Banja
+0

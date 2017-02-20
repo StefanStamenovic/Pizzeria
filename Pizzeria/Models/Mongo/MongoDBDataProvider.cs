@@ -114,7 +114,7 @@ namespace Pizzeria.Models.Mongo
 
         #region Order
 
-        public void OrderCreate(string name, string adress, string phone, string price, string date,List<OrderedDish> orderedDish)
+        public void OrderCreate(string name, string adress, string phone, string price, string date, ObjectId restaurantId, List<OrderedDish> orderedDish)
         {
             IMongoCollection<Order> collection = database.GetCollection<Order>("orders");
             Order order = new Order
@@ -124,7 +124,8 @@ namespace Pizzeria.Models.Mongo
                 phone = phone,
                 price = price,
                 date = date,
-                orderedDish = orderedDish
+                orderedDish = orderedDish,
+                restaurantId = restaurantId
             };
             collection.InsertOne(order);
         }
@@ -181,9 +182,9 @@ namespace Pizzeria.Models.Mongo
                 deliverer.orders = new List<Order>();
                 foreach(ObjectId id in deliverer.ordersIds)
                 {
-                    Order oreder = OrderGet(id);
+                    Order order = OrderGet(id);
                     if (id != null)
-                        deliverer.orders.Add(oreder);
+                        deliverer.orders.Add(order);
                 }
             }
             return deliverers;
@@ -240,12 +241,38 @@ namespace Pizzeria.Models.Mongo
 
         #endregion
 
+        #region District
+
+        public List<District> DistrictGetAll()
+        {
+            IMongoCollection<District> collection = database.GetCollection<District>("districts");
+            List<District> districts = collection.Find<District>(new BsonDocument()).ToList<District>();
+            return districts;
+        }
+
+
+        public District DistrictGet(string name)
+        {
+            IMongoCollection<District> collection = database.GetCollection<District>("districts");
+            District district = collection.Find<District>(x => x.name == name).SingleOrDefault<District>();
+            return district;
+        }
+
+        public void DistrictCreate(District district)
+        {
+            IMongoCollection<District> collection = database.GetCollection<District>("districts");
+            collection.InsertOne(district);
+        }
+
+        #endregion
+
         public void DeleteAllData()
         {
             database.DropCollection("categories");
             database.DropCollection("orders");
             database.DropCollection("deliverers");
             database.DropCollection("history");
+            database.DropCollection("districts");
         }
     }
 }

@@ -156,3 +156,21 @@ function resetPage() {
     $("#phone").val("");
     renderCart();
 }
+
+function setupMap(map) {
+    var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var labelIndex = 0;
+
+    $("[data-marker]").each(function() {
+        var markerData = $(this).data('marker');
+        var lat = markerData.coordinates[0];
+        var lng = markerData.coordinates[1];
+        var marker = new google.maps.Marker({
+            position: { lat, lng },
+            label: labels[labelIndex++ % labels.length],
+            map: map
+        });
+        
+    }
+)}
+    

@@ -2,7 +2,7 @@
 @using Pizzeria.Models.Mongo.Models;
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Menagement Page";
+    ViewBag.Title = "Management Page";
     String supptext = "support";
     String style;
 }
@@ -42,7 +42,7 @@
                                 @if(@order.deliverer == null)
                                 {
                                     <div class="pull-right" style="vertical-align:central;margin-top:20px;">
-                                        <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Delete</a>
+                                        <a href="@Url.Action("DeleteOrder", "Managment", new { id = @order.id })" class="btn btn-default" >Delete</a>
                                     </div>
                                 }
                             </div>
@@ -94,7 +94,7 @@
                         @if (Model.orders.Count < 1)
                         {
                             <hr />
-                            <h4 class="text-muted">There is no orders.</h4>
+                            <h4 class="text-muted">There are no orders.</h4>
                         }
                     </div>
                 </div>
@@ -163,7 +163,7 @@
                             @if (Model.deliverers.Count < 1)
                             {
                                 <hr />
-                                <h4 class="text-muted">There is no deliverers.</h4>
+                                <h4 class="text-muted">There are no deliverers.</h4>
                             }
                         </div>
                     </div>
@@ -173,7 +173,7 @@
                 @if (Model.history.Count < 1)
                 {
                     <hr />
-                    <h4 class="text-muted">There is no orders in history.</h4>
+                    <h4 class="text-muted">There are no orders in history.</h4>
                 }
                 else
                 {
@@ -384,12 +384,12 @@
                     <h4 class="modal-title">Create Supplement</h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" action="CreateGenre/" method="get">
+                    <form class="form-horizontal" action="/Management/CreateSupplement" method="get">
                         <fieldset>
                             <div class="form-group">
                                 <label for="select" class="col-lg-2 control-label">Category</label>
                                 <div class="col-lg-10">
-                                    <select class="form-control" id="category">
+                                    <select class="form-control" name="category">
                                         @foreach (Category category in Model.categories)
                                         {
                                             <option value="@category.id">@category.name</option>
@@ -496,12 +496,12 @@
                     <h4 class="modal-title">Delete Supplement</h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" action="CreateGenre/" method="get">
+                    <form class="form-horizontal" action="/Management/DeleteSupplement" method="get">
                         <fieldset>
                             <div class="form-group">
                                 <label for="select" class="col-lg-2 control-label">Category</label>
                                 <div class="col-lg-10">
-                                    <select class="form-control" id="category">
+                                    <select class="form-control" id="category" name="category">
                                         @foreach (Category category in Model.categories)
                                         {
                                             <option value="@category.id">@category.name</option>

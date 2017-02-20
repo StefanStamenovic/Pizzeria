@@ -31,6 +31,13 @@ namespace Pizzeria.Models.Mongo.Models
         [BsonElement("deliverer")]
         public Deliverer deliverer { get; set; }
 
+
+        [BsonElement("restaurant")]
+        public ObjectId restaurantId { get; set; }
+
+        [BsonIgnore]
+        public Restaurant restaurant { get; set; }
+
         [BsonElement("orderedDish")]
         public List<OrderedDish> orderedDish { get; set; }
     }
