@@ -34,7 +34,7 @@
                                 @if(@order.deliverer == null)
                                 {
                                     <div class="pull-right" style="vertical-align:central;margin-top:20px;">
-                                        <a href="@Url.Action("DeleteOrder", "Managment", new { id = @order.id })" class="btn btn-default" >Delete</a>
+                                        <a href="@Url.Action("DeleteOrder", "Management", new { id = @order.id })" class="btn btn-default" >Delete</a>
                                     </div>
                                 }
                             </div>
@@ -132,13 +132,13 @@
                                     @if (deliverer.available)
                                     {
                                         <span class="pull-right" style="vertical-align:central;">
-                                            <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Unavailabele</a>
+                                            <a href="/Management/ChangeDelivererStatus?id=@deliverer.id&available=false" class="btn btn-default">Unavailable</a>
                                         </span>
                                     }
                                     else
                                     {
                                         <div class="pull-right" style="vertical-align:central;">
-                                            <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Availabele</a>
+                                            <a href="/Management/ChangeDelivererStatus?id=@deliverer.id&available=true" class="btn btn-default">Available</a>
                                         </div>
                                     }
                                 </div>
@@ -160,12 +160,9 @@
                                                                 <h4>Price: @order.price</h4>
                                                             </div>
                                                         </div>
-                                                        @if (@order.deliverer == null)
-                                                        {
                                                         <div class="pull-right" style="vertical-align:central;margin-top:20px;margin-right:5px;">
-                                                            <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Delete</a>
+                                                            <a href="/Management/MoveOrderToHistory?orderId=@order.id&delivererId=@order.deliverer.id" class="btn btn-default">Delete</a>
                                                         </div>
-                                                        }
                                                     </li>
                                                 </ul>
                                             }
@@ -206,7 +203,7 @@
                                 </div>
                             </div>
                             <div class="pull-right" style="vertical-align:central;margin-top:20px;">
-                                <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Delete</a>
+                                <a href="/Management/DeleteOrderFromHistory?id=@order.id" class="btn btn-default">Delete</a>
                             </div>
                         </div>
                         <div id="@order.id" class="sublinks collapse">
@@ -291,7 +288,7 @@
                     <h4 class="modal-title">Create Deliverer</h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" action="CreateGenre/" method="get">
+                    <form class="form-horizontal" action="/Management/CreateDeliverer" method="get">
                         <fieldset>
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Name:</label>
