@@ -92,5 +92,12 @@ namespace Pizzeria.Controllers
             provider.DelivererDeliver(new MongoDB.Bson.ObjectId(orderId), new MongoDB.Bson.ObjectId(delivererId));
             return Redirect("/Management");
         }
+
+        public ActionResult DelivererAssign(string order, string deliverer)
+        {
+            MongoDBDataProvider provider = new MongoDBDataProvider();
+            provider.DelivererAssignDeliverer(new MongoDB.Bson.ObjectId(order), new MongoDB.Bson.ObjectId(deliverer));
+            return Redirect("/Management");
+        }
     }
 }
