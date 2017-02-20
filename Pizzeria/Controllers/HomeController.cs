@@ -20,7 +20,7 @@ namespace Pizzeria.Controllers
             HomeViewModel model = new HomeViewModel();
 
             DBInitializer initializer = new DBInitializer();
-            //initializer.DeleteAllData();
+            initializer.DeleteAllData();
             initializer.Initialize();
 
             model.categories = provider.CategoryGetAll();

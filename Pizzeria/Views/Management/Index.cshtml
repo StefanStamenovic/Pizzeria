@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Management Page";
     String supptext = "support";
-    String style;
 }
 
 <div class="row">
@@ -20,15 +19,7 @@
                     <div class="list-group">
                         @foreach (Order order in Model.orders)
                         {
-                            if (order.deliverer == null)
-                            {
-                                style = "";
-                            }
-                            else
-                            {
-                                style = "style=background-color:lightcyan;";
-                            }
-                            <div class="list-group-item clearfix" @style>
+                            <div class="list-group-item clearfix">
                                 <div class="col-lg-10" data-toggle="collapse" data-target="#@order.id">
                                     <div class="col-lg-8" style="text-decoration: none;">
                                         <div class="h4"> @order.name</div>
@@ -76,14 +67,35 @@
                                                 </ul>
                                                 if (order.deliverer == null)
                                                 {
-                                                    <div class="pull-right" style="vertical-align:central;margin-top:-10px;">
-                                                        <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Deliverer</a>
-                                                    </div>
+                                                    <form class="form-horizontal list-group-item" action="/Management/DelivererAssign/" method="get">
+                                                        <fieldset>
+                                                            <input type="hidden"  name="order" value="@order.id"/>
+                                                            <div class="form-group">
+                                                                <label for="select" class="col-lg-2 control-label">Available deliverers</label>
+                                                                <div class="col-lg-10">
+                                                                    <select class="form-control" name="deliverer">
+                                                                        @foreach (Deliverer deliverer in Model.deliverers)
+                                                                        {
+                                                                            if (deliverer.available)
+                                                                            {
+                                                                                <option value="@deliverer.id">@deliverer.name</option>
+                                                                            }
+                                                                        }
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="col-lg-10 col-lg-offset-2">
+                                                                    <button type="submit" class="btn btn-primary pull-right">Assign</button>
+                                                                </div>
+                                                            </div>
+                                                        </fieldset>
+                                                    </form>
                                                 }
                                                 else
                                                 {
                                                     <div class="list-group-item">
-                                                        <h4>Deliverer: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; order.deliverer.name</h4>
+                                                        <h4>Deliverer: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @order.deliverer.name</h4>
                                                     </div>
                                                 }
                                             }

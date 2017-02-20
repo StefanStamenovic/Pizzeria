@@ -202,6 +202,10 @@ namespace Pizzeria.Models.Mongo
             Deliverer _deliverer = DelivererGet(deliverer);
             UpdateDefinition<Order> update = Builders<Order>.Update.Set("deliverer", _deliverer);
             collection.FindOneAndUpdate(x => x.id==order, update);
+
+            IMongoCollection<Deliverer>  collection1 = database.GetCollection<Deliverer>("deliverers");
+            UpdateDefinition<Deliverer> update1 = Builders<Deliverer>.Update.Push("orders", order);
+            collection1.FindOneAndUpdate(x => x.id==deliverer, update1);
         }
 
         public void DelivererSetAvailable(ObjectId deliverer,bool available)
