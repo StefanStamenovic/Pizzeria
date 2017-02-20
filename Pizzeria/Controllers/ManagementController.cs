@@ -99,5 +99,12 @@ namespace Pizzeria.Controllers
             provider.DelivererAssignDeliverer(new MongoDB.Bson.ObjectId(order), new MongoDB.Bson.ObjectId(deliverer));
             return Redirect("/Management");
         }
+
+        public ActionResult DeleteOrderFromHistory(string id)
+        {
+            MongoDBDataProvider provider = new MongoDBDataProvider();
+            provider.HistoryOrderDelete(new MongoDB.Bson.ObjectId(id));
+            return Redirect("/Management");
+        }
     }
 }
