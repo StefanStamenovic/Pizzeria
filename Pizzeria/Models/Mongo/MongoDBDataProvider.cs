@@ -166,7 +166,7 @@ namespace Pizzeria.Models.Mongo
             Deliverer deliverer = new Deliverer
             {
                 name = name,
-                ordersIds = new List<ObjectId>(),
+                orders = new List<Order>(),
                 available = true
             };
             collection.InsertOne(deliverer);
@@ -183,16 +183,6 @@ namespace Pizzeria.Models.Mongo
         {
             IMongoCollection<Deliverer> collection = database.GetCollection<Deliverer>("deliverers");
             List<Deliverer> deliverers = collection.Find<Deliverer>(new BsonDocument()).ToList<Deliverer>();
-            foreach(Deliverer deliverer in deliverers)
-            {
-                deliverer.orders = new List<Order>();
-                foreach(ObjectId id in deliverer.ordersIds)
-                {
-                    Order order = OrderGet(id);
-                    if (id != null)
-                        deliverer.orders.Add(order);
-                }
-            }
             return deliverers;
         }
 
@@ -203,8 +193,9 @@ namespace Pizzeria.Models.Mongo
             UpdateDefinition<Order> update = Builders<Order>.Update.Set("deliverer", _deliverer);
             collection.FindOneAndUpdate(x => x.id==order, update);
 
+            Order _order = OrderGet(order);
             IMongoCollection<Deliverer>  collection1 = database.GetCollection<Deliverer>("deliverers");
-            UpdateDefinition<Deliverer> update1 = Builders<Deliverer>.Update.Push("orders", order);
+            UpdateDefinition<Deliverer> update1 = Builders<Deliverer>.Update.Push("orders", _order);
             collection1.FindOneAndUpdate(x => x.id==deliverer, update1);
         }
 
@@ -218,10 +209,10 @@ namespace Pizzeria.Models.Mongo
         public void DelivererDeliver(ObjectId order, ObjectId deliverer)
         {
             Order horder = OrderGet(order);
-            OrderDelete(deliverer);
+            OrderDelete(order);
 
             IMongoCollection<Deliverer> collection = database.GetCollection<Deliverer>("deliverers");
-            UpdateDefinition<Deliverer> update = Builders<Deliverer>.Update.PullFilter("orders", Builders<Dish>.Filter.Eq("_id", order));
+            UpdateDefinition<Deliverer> update = Builders<Deliverer>.Update.PullFilter(x => x.orders,o => o.id==order) ;
             collection.FindOneAndUpdate(x => x.id == deliverer, update);
             HistoryOrderCreate(horder);
         }

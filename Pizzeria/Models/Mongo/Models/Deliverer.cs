@@ -20,9 +20,6 @@ namespace Pizzeria.Models.Mongo.Models
         public bool available { get; set; }
 
         [BsonElement("orders")]
-        public List<ObjectId> ordersIds { get; set; }
-
-        [BsonIgnore]
         public List<Order> orders { get; set; }
     }
 }
