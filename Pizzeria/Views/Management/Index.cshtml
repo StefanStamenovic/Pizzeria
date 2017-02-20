@@ -12,6 +12,7 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#orders" data-toggle="tab" aria-expanded="true">Orders</a></li>
             <li class=""><a href="#deliverers" data-toggle="tab" aria-expanded="false">Deliverers</a></li>
+            <li class=""><a href="#history" data-toggle="tab" aria-expanded="false">History</a></li>
         </ul>
         <div id="myTabContent" class="tab-content">
             <div class="tab-pane fade active in" id="orders">
@@ -46,8 +47,7 @@
                                 }
                             </div>
                             <div id="@order.id" class="sublinks collapse">
-                                <div>
-                                    
+                                <div>  
                                     <div class="panel panel-default" style="margin-bottom:0px;padding-bottom:0px;">
                                         <div class="panel-heading">Dishes</div>
                                         <div class="panel-body" style=" padding-top:0px;">
@@ -79,10 +79,15 @@
                                                         <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Deliverer</a>
                                                     </div>
                                                 }
+                                                else
+                                                {
+                                                    <div class="list-group-item">
+                                                        <h4>Deliverer: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; order.deliverer.name</h4>
+                                                    </div>
+                                                }
                                             }
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         }
@@ -96,12 +101,140 @@
             </div>
             <div class="tab-pane fade" id="deliverers">
                 <div class="panel-body" style="padding: 0px;">
-                    <div class="clearfix" style="margin: 5px;">
-                        <div class="pull-right">
-                            <a href="/Song/CreateDraft/" class="btn btn-default">Create new</a>
+                    <div class="col-lg-12 clearfix">
+                        <div class="pull-right" style="margin: 5px;">
+                            <a data-toggle="modal" data-target="#addDeliverer" class="btn btn-default">Create new</a>
+                        </div>
+                    </div>
+                    <div class="clearfix" style="margin: 5px;margin-top:50px">
+                        <div class="list-group">
+                            @foreach (Deliverer deliverer in Model.deliverers)
+                            {
+                                <div class="list-group-item clearfix">
+                                    <div class="col-lg-10" data-toggle="collapse" data-target="#@deliverer.id">
+                                        <div class="col-lg-8" style="text-decoration: none;">
+                                            <div class="h4"> @deliverer.name</div>
+                                        </div>
+                                    </div>
+                                    @if (deliverer.available)
+                                    {
+                                        <span class="pull-right" style="vertical-align:central;">
+                                            <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Unavailabele</a>
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <div class="pull-right" style="vertical-align:central;">
+                                            <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Availabele</a>
+                                        </div>
+                                    }
+                                </div>
+                                if (deliverer.orders.Count > 0)
+                                {
+                                    <div id="@deliverer.id" class="sublinks collapse">
+                                        <div style="border: solid 1px #e7e7e7">
+                                            @foreach (Order order in deliverer.orders)
+                                            {
+                                                <ul class="list-group" style="margin-left:0px;margin-right:0px; margin-top:-1px;margin-bottom:0px;">
+                                                    <li class="list-group-item clearfix" style="padding:0px; margin-top:1px;">
+                                                        <div class="col-lg-10" data-toggle="collapse" data-target="#@order.id">
+                                                            <div class="col-lg-8" style="text-decoration: none;">
+                                                                <div class="h4"> @order.name</div>
+                                                                <div> @order.adress</div>
+                                                                <div> @order.phone</div>
+                                                            </div>
+                                                            <div class="col-lg-4" style="vertical-align:central;margin-top:20px;">
+                                                                <h4>Price: @order.price</h4>
+                                                            </div>
+                                                        </div>
+                                                        @if (@order.deliverer == null)
+                                                        {
+                                                        <div class="pull-right" style="vertical-align:central;margin-top:20px;margin-right:5px;">
+                                                            <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Delete</a>
+                                                        </div>
+                                                        }
+                                                    </li>
+                                                </ul>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            @if (Model.deliverers.Count < 1)
+                            {
+                                <hr />
+                                <h4 class="text-muted">There is no deliverers.</h4>
+                            }
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="tab-pane fade" id="history">
+                @if (Model.history.Count < 1)
+                {
+                    <hr />
+                    <h4 class="text-muted">There is no orders in history.</h4>
+                }
+                else
+                {
+                    <div class="panel-body" style="padding: 0px;">
+                        @foreach (Order order in Model.history)
+                        {
+                        <div class="list-group-item clearfix">
+                            <div class="col-lg-10" data-toggle="collapse" data-target="#@order.id">
+                                <div class="col-lg-8" style="text-decoration: none;">
+                                    <div class="h4"> @order.name</div>
+                                    <div> @order.adress</div>
+                                    <div> @order.phone</div>
+                                </div>
+                                <div class="col-lg-4" style="vertical-align:central;margin-top:20px;">
+                                    <h4>Price: @order.price</h4>
+                                </div>
+                            </div>
+                            <div class="pull-right" style="vertical-align:central;margin-top:20px;">
+                                <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Delete</a>
+                            </div>
+                        </div>
+                        <div id="@order.id" class="sublinks collapse">
+                            <div>
+
+                                <div class="panel panel-default" style="margin-bottom:0px;padding-bottom:0px;">
+                                    <div class="panel-heading">Dishes</div>
+                                    <div class="panel-body" style=" padding-top:0px;">
+                                        @foreach (OrderedDish orderedDish in order.orderedDish)
+                                        {
+                                            <ul class="list-group" style="margin-left:-15px;margin-right:-15px;">
+                                                <li class="list-group-item clearfix" style="padding:0px; margin-top:0px;">
+                                                    <div class="col-lg-12 clearfix" style="padding:0px;">
+                                                        <div class="col-lg-12" style="padding:0px;">
+                                                            <div class="col-lg-12 clearfix h3" style="text-decoration:none;text;border-bottom:solid 1px #e7e7e7;margin:0px;padding-bottom:10px;padding-top:10px;vertical-align:central;">@orderedDish.dish.name <span class="pull-right" style="margin-right:10px;">x @orderedDish.quantity</span></div>
+                                                            @if (@orderedDish.supplements.Count > 0)
+                                                            {
+                                                                <div class="col-lg-12" style="padding:0px;">
+                                                                    @foreach (Supplement supplement in orderedDish.supplements)
+                                                                    {
+                                                                        <div class="col-lg-12" style="background-color:#fafafa;border-bottom:solid 1px #e7e7e7;">
+                                                                            <p>@supplement.name</p>
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="list-group-item">
+                                                <h4>Deliverer: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @order.deliverer.name</h4>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        }
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -113,26 +246,285 @@
                     <li class="list-group-item clearfix">
                         <h4 class="pull-left">Category</h4>
                         <div class="pull-right">
-                            <a href="#addArtistModal" data-toggle="modal" class="btn btn-default">Add</a>
-                            <a href="#deleteArtistModal" data-toggle="modal" class="btn btn-default">Delete</a>
+                            <a href="#addCategory" data-toggle="modal" class="btn btn-default">Add</a>
+                            <a href="#deleteCategory" data-toggle="modal" class="btn btn-default">Delete</a>
                         </div>
                     </li>
                     <li class="list-group-item clearfix">
                         <h4 class="pull-left">Dish</h4>
                         <div class="pull-right">
-                            <a href="#addGenreModal" data-toggle="modal" class="btn btn-default">Add</a>
-                            <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Delete</a>
+                            <a href="#addDish" data-toggle="modal" class="btn btn-default">Add</a>
+                            <a href="#deleteDish" data-toggle="modal" class="btn btn-default">Delete</a>
                         </div>
                     </li>
                     <li class="list-group-item clearfix">
                         <h4 class="pull-left">Supplement</h4>
                         <div class="pull-right">
-                            <a href="#addGenreModal" data-toggle="modal" class="btn btn-default">Add</a>
-                            <a href="#deleteGenreModal" data-toggle="modal" class="btn btn-default">Delete</a>
+                            <a href="#addSupplement" data-toggle="modal" class="btn btn-default">Add</a>
+                            <a href="#deleteSupplement" data-toggle="modal" class="btn btn-default">Delete</a>
                         </div>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
+
+    <div class="modal" id="addDeliverer">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Create Deliverer</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" action="CreateGenre/" method="get">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Name:</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-10 col-lg-offset-2">
+                                    <button type="submit" class="btn btn-primary pull-right">Create</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="addCategory">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Create Category</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" action="CreateGenre/" method="get">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Name:</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-10 col-lg-offset-2">
+                                    <button type="submit" class="btn btn-primary pull-right">Create</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="addDish">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Create Dish</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" action="CreateGenre/" method="get">
+                        <fieldset>
+                            <div class="form-group">
+                                <label for="select" class="col-lg-2 control-label">Category</label>
+                                <div class="col-lg-10">
+                                    <select class="form-control" id="category">
+                                        @foreach(Category category in Model.categories)
+                                        {
+                                            <option value="@category.id">@category.name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Name:</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Description:</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="description" name="description" placeholder="Description">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Price:</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="price" name="price" placeholder="Price">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-10 col-lg-offset-2">
+                                    <button type="submit" class="btn btn-primary pull-right">Create</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="addSupplement">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Create Supplement</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" action="CreateGenre/" method="get">
+                        <fieldset>
+                            <div class="form-group">
+                                <label for="select" class="col-lg-2 control-label">Category</label>
+                                <div class="col-lg-10">
+                                    <select class="form-control" id="category">
+                                        @foreach (Category category in Model.categories)
+                                        {
+                                            <option value="@category.id">@category.name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Name:</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Price:</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="price" name="price" placeholder="Price">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-10 col-lg-offset-2">
+                                    <button type="submit" class="btn btn-primary pull-right">Create</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="deleteCategory">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Delete Category</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" action="CreateGenre/" method="get">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Name:</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-10 col-lg-offset-2">
+                                    <button type="submit" class="btn btn-primary pull-right">Delete</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="deleteDish">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Delete Dish</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" action="CreateGenre/" method="get">
+                        <fieldset>
+                            <div class="form-group">
+                                <label for="select" class="col-lg-2 control-label">Category</label>
+                                <div class="col-lg-10">
+                                    <select class="form-control" id="category">
+                                        @foreach (Category category in Model.categories)
+                                        {
+                                            <option value="@category.id">@category.name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Name:</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-10 col-lg-offset-2">
+                                    <button type="submit" class="btn btn-primary pull-right">Delete</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="deleteSupplement">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Delete Supplement</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" action="CreateGenre/" method="get">
+                        <fieldset>
+                            <div class="form-group">
+                                <label for="select" class="col-lg-2 control-label">Category</label>
+                                <div class="col-lg-10">
+                                    <select class="form-control" id="category">
+                                        @foreach (Category category in Model.categories)
+                                        {
+                                            <option value="@category.id">@category.name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Name:</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-10 col-lg-offset-2">
+                                    <button type="submit" class="btn btn-primary pull-right">Delete</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

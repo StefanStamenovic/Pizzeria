@@ -165,6 +165,13 @@ namespace Pizzeria.Models.Mongo
             collection.InsertOne(deliverer);
         }
 
+        public Deliverer DelivererGet(ObjectId id)
+        {
+            IMongoCollection<Deliverer> collection = database.GetCollection<Deliverer>("deliverers");
+            Deliverer deliverer = collection.Find<Deliverer>(x => x.id == id).SingleOrDefault<Deliverer>();
+            return deliverer;
+        }
+
         public List<Deliverer> DelivererGetAll()
         {
             IMongoCollection<Deliverer> collection = database.GetCollection<Deliverer>("deliverers");
@@ -184,12 +191,51 @@ namespace Pizzeria.Models.Mongo
 
         public void DelivererAssignDeliverer(ObjectId order, ObjectId deliverer)
         {
-
+            IMongoCollection<Order> collection = database.GetCollection<Order>("orders");
+            Deliverer _deliverer = DelivererGet(deliverer);
+            UpdateDefinition<Order> update = Builders<Order>.Update.Set("deliverer", _deliverer);
+            collection.FindOneAndUpdate(x => x.id==order, update);
         }
 
-        public void DelivererSetActive(ObjectId deliverer)
+        public void DelivererSetAvailable(ObjectId deliverer,bool available)
         {
+            IMongoCollection<Deliverer> collection = database.GetCollection<Deliverer>("deliverers");
+            UpdateDefinition<Deliverer> update = Builders<Deliverer>.Update.Set("available", available);
+            collection.FindOneAndUpdate(x => x.id == deliverer, update);
+        }
 
+        public void DelivererDeliver(ObjectId order, ObjectId deliverer)
+        {
+            Order horder = OrderGet(order);
+            OrderDelete(deliverer);
+
+            IMongoCollection<Deliverer> collection = database.GetCollection<Deliverer>("deliverers");
+            UpdateDefinition<Deliverer> update = Builders<Deliverer>.Update.PullFilter("orders", Builders<Dish>.Filter.Eq("_id", order));
+            collection.FindOneAndUpdate(x => x.id == deliverer, update);
+            HistoryOrderCreate(horder);
+        }
+
+        #endregion
+
+        #region History
+
+        public void HistoryOrderCreate(Order order)
+        {
+            IMongoCollection<Order> collection = database.GetCollection<Order>("history");
+            collection.InsertOne(order);
+        }
+
+        public List<Order> HistoryOrderGetAll()
+        {
+            IMongoCollection<Order> collection = database.GetCollection<Order>("history");
+            List<Order> orders = collection.Find<Order>(new BsonDocument()).ToList<Order>();
+            return orders;
+        }
+
+        public void HistoryOrderDelete(ObjectId id)
+        {
+            IMongoCollection<Order> collection = database.GetCollection<Order>("history");
+            collection.DeleteOne(x => x.id == id);
         }
 
         #endregion
@@ -199,6 +245,7 @@ namespace Pizzeria.Models.Mongo
             database.DropCollection("categories");
             database.DropCollection("orders");
             database.DropCollection("deliverers");
+            database.DropCollection("history");
         }
     }
 }

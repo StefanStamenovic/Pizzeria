@@ -17,6 +17,9 @@ namespace Pizzeria.Controllers
             ManagementViewModel model = new ManagementViewModel();
 
             model.orders = provider.OrderGetAll();
+            model.history = provider.HistoryOrderGetAll();
+            model.deliverers = provider.DelivererGetAll();
+            model.categories = provider.CategoryGetAll();
             return View(model);
         }
     }
