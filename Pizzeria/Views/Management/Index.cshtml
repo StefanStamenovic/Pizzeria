@@ -34,6 +34,7 @@
                                         <div class="h4"> @order.name</div>
                                         <div> @order.adress</div>
                                         <div> @order.phone</div>
+                                        <div class="h6"> @order.date</div>
                                     </div>
                                     <div class="col-lg-4" style="vertical-align:central;margin-top:20px;">
                                         <h4>Price: @order.price</h4>
@@ -186,6 +187,7 @@
                                     <div class="h4"> @order.name</div>
                                     <div> @order.adress</div>
                                     <div> @order.phone</div>
+                                    <div class="h6"> @order.date</div>
                                 </div>
                                 <div class="col-lg-4" style="vertical-align:central;margin-top:20px;">
                                     <h4>Price: @order.price</h4>
@@ -305,7 +307,7 @@
                     <h4 class="modal-title">Create Category</h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" action="CreateGenre/" method="get">
+                    <form class="form-horizontal" action="/Management/CreateCategory/" method="get">
                         <fieldset>
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Name:</label>
@@ -333,15 +335,15 @@
                     <h4 class="modal-title">Create Dish</h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" action="CreateGenre/" method="get">
+                    <form class="form-horizontal" action="/Management/CreateDish/" method="get">
                         <fieldset>
                             <div class="form-group">
                                 <label for="select" class="col-lg-2 control-label">Category</label>
                                 <div class="col-lg-10">
-                                    <select class="form-control" id="category">
-                                        @foreach(Category category in Model.categories)
+                                    <select class="form-control" name="category">
+                                        @foreach (Category category in Model.categories)
                                         {
-                                            <option value="@category.id">@category.name</option>
+                                            <option value="@category.name">@category.name</option>
                                         }
                                     </select>
                                 </div>
@@ -392,7 +394,7 @@
                                     <select class="form-control" name="category">
                                         @foreach (Category category in Model.categories)
                                         {
-                                            <option value="@category.id">@category.name</option>
+                                            <option value="@category.name">@category.name</option>
                                         }
                                     </select>
                                 </div>
@@ -429,12 +431,17 @@
                     <h4 class="modal-title">Delete Category</h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" action="CreateGenre/" method="get">
+                    <form class="form-horizontal" action="/Management/DeleteCategory/" method="get">
                         <fieldset>
                             <div class="form-group">
-                                <label class="col-lg-2 control-label">Name:</label>
+                                <label for="select" class="col-lg-2 control-label">Category</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+                                    <select class="form-control" name="id">
+                                        @foreach (Category category in Model.categories)
+                                        {
+                                            <option value="@category.id">@category.name</option>
+                                        }
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -457,15 +464,15 @@
                     <h4 class="modal-title">Delete Dish</h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" action="CreateGenre/" method="get">
+                    <form class="form-horizontal" action="/Management/DeleteDish/" method="get">
                         <fieldset>
                             <div class="form-group">
                                 <label for="select" class="col-lg-2 control-label">Category</label>
                                 <div class="col-lg-10">
-                                    <select class="form-control" id="category">
+                                    <select class="form-control" name="category">
                                         @foreach (Category category in Model.categories)
                                         {
-                                            <option value="@category.id">@category.name</option>
+                                            <option value="@category.name">@category.name</option>
                                         }
                                     </select>
                                 </div>
@@ -504,7 +511,7 @@
                                     <select class="form-control" id="category" name="category">
                                         @foreach (Category category in Model.categories)
                                         {
-                                            <option value="@category.id">@category.name</option>
+                                            <option value="@category.name">@category.name</option>
                                         }
                                     </select>
                                 </div>

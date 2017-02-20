@@ -43,5 +43,33 @@ namespace Pizzeria.Controllers
             provider.CategorySupplementRemove(name, category);
             return Redirect("/Management");
         }
+
+        public ActionResult CreateDish(string category, string name,string description, int price)
+        {
+            MongoDBDataProvider provider = new MongoDBDataProvider();
+            provider.CategoryDishCreate(name, description, price, category);
+            return Redirect("/Management");
+        }
+
+        public ActionResult DeleteDish(string name, string category)
+        {
+            MongoDBDataProvider provider = new MongoDBDataProvider();
+            provider.CategoryDishRemove(name, category);
+            return Redirect("/Management");
+        }
+
+        public ActionResult CreateCategory(string name)
+        {
+            MongoDBDataProvider provider = new MongoDBDataProvider();
+            provider.CategoryCreate(name);
+            return Redirect("/Management");
+        }
+
+        public ActionResult DeleteCategory(string id)
+        {
+            MongoDBDataProvider provider = new MongoDBDataProvider();
+            provider.CategoryDelete(new MongoDB.Bson.ObjectId(id));
+            return Redirect("/Management");
+        }
     }
 }

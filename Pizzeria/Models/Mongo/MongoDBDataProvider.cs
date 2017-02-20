@@ -36,6 +36,12 @@ namespace Pizzeria.Models.Mongo
             collection.InsertOne(category);
         }
 
+        public void CategoryDelete(ObjectId id)
+        {
+            IMongoCollection<Category> collection = database.GetCollection<Category>("categories");
+            collection.DeleteOne(x => x.id == id);
+        }
+
         public Category CategoryGet(string name)
         {
             IMongoCollection<Category> collection = database.GetCollection<Category>("categories");
