@@ -21,13 +21,16 @@
                                         <a class="list-group-item h3" data-toggle="collapse" data-target="#@dish.name.Replace(" ", String.Empty)" style="margin-top:-1px"> @dish.name <span class="pull-right h4"> Price:&nbsp;&nbsp;@dish.price</span><p class="h6">@dish.description</p></a>
                                         <div id="@dish.name.Replace(" ", String.Empty)" class="sublinks collapse">
                                             <div class="list-group-item">
-                                                <form class="form-horizontal">
+                                                <form class="form-horizontal dishes" action="Home/AddToCart">
+                                                    <input type="hidden" name="category" value="@category.name" />
+                                                    <input type="hidden" name="dish" value="@dish.name" />
+                                                    <input type="hidden" name="price" value="@dish.price" />
                                                     <fieldset>
                                                         <div class="form-group">
                                                             <div class="col-lg-6">
                                                                 <label class="col-lg-2 control-label">Quantity:</label>
                                                                 <div class="col-lg-9 col-lg-offset-1">
-                                                                    <select class="form-control" id="select">
+                                                                    <select class="form-control" id="select" name="quantity">
                                                                         <option>1</option>
                                                                         <option>2</option>
                                                                         <option>3</option>
@@ -37,7 +40,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-2 col-lg-offset-2">
-                                                                <button type="button" class="btn btn-primary">Add to cart</button>
+                                                                <button type="submit" class="btn btn-primary">Add to cart</button>
                                                             </div>
                                                             @if (category.supplements != null)
                                                             {
@@ -48,7 +51,7 @@
                                                                     @foreach (Supplement supplement in category.supplements)
                                                                     {
                                                                         <label style="width:100%;">
-                                                                            <input type="checkbox" name="@supplement.name" value="@supplement.name"> @supplement.name  Price: @supplement.price
+                                                                            <input type="checkbox" name="supplements" value="@supplement.name"> @supplement.name  Price: @supplement.price
                                                                         </label>
                                                                     }
                                                                 </div>
@@ -70,30 +73,30 @@
         <div class="panel panel-info">
             <div class="panel-heading">Order</div>
             <div class="panel-body">
-                <form class="form-horizontal">
+                <form action="Home/ProcessOrder" class="form-horizontal cart">
                     <fieldset>
                         <div class="form-group">
                             <div class="col-lg-12" style="margin-bottom: 5px;">
                                 <label class="col-lg-2 control-label">Name</label>
                                 <div class="col-lg-9">
-                                    <input type="text" class="form-control" id="name" placeholder="Name" />
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name" />
                                 </div>
                             </div>
                             <div class="col-lg-12" style="margin-bottom: 5px;">
                                 <label class="col-lg-2 control-label">Adress</label>
                                 <div class="col-lg-9">
-                                    <input type="text" class="form-control" id="adress" placeholder="Adress" />
+                                    <input type="text" class="form-control" id="adress" name="adress" placeholder="Adress" />
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <label class="col-lg-2 control-label">Phone</label>
                                 <div class="col-lg-9">
-                                    <input type="text" class="form-control" id="phone" placeholder="Phone" />
+                                    <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone" />
                                 </div>
                             </div>
                         </div>
                         <div>
-                            <a href="#" data-toggle="modal" class="btn btn-default">Order</a>
+                            <button type="submit" class="btn btn-default">Order</button>
                         </div>
                     </fieldset>
                 </form>
@@ -102,34 +105,13 @@
         <div class="panel panel-info">
             <div class="panel-heading">Cart</div>
             <div class="panel-body">
-                <ul class="list-group" style="margin-left:-10px;margin-right:-10px;">
-                    <li class="list-group-item clearfix" style="padding:0px; margin-top:10px;">
-                        <div class="col-lg-12 clearfix" style="padding:0px;">
-                            <div class="col-lg-12" style="padding:0px;background-color:azure;">
-                                <div class="col-lg-12 clearfix h3" data-toggle="collapse" data-target="#dishname" style="text-decoration:none;text;border-bottom:solid 1px #e7e7e7;margin:0px;padding-bottom:4px;padding-top:4px;vertical-align:central;">Name <span class="pull-right"><input type="button" value="X" class="btn btn-default"></span></div>
-                                <div id="dishname" class="col-lg-12 sublinks collapse" style="padding:0px;">
-                                    <a class="list-group-item h4" data-toggle="collapse" data-target="#supplements" style="text-decoration:none; border:none;border-bottom:solid 1px #e7e7e7; margin:0px;"> Supplements </a>
-                                    <div id="supplements" class="col-lg-12 sublinks collapse" style="background-color:#fafafa;padding:0px;">
-                                        <div class="col-lg-12" style="background-color:#fafafa;border-bottom:solid 1px #e7e7e7;">
-                                            <p>SupplementName <span class="pull-right">Price: #price</span></p>
-                                        </div>
-                                        <div class="col-lg-12" style="background-color:#fafafa;border-bottom:solid 1px #e7e7e7;">
-                                            <p>SupplementName <span class="pull-right">Price: #price</span></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <h4>Price: <span style="margin-left:20px;"> #price</span><span style="margin-left:80px;"> x #quantity</span></h4>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                <ul id="orderedDishes" class="list-group" style="margin-left:-10px;margin-right:-10px;">
                 </ul>
-                <form class="form-horizontal">
+                <form class="form-horizontal dishes">
                     <fieldset>
                         <hr style="margin-top: -5px" />
                         <div>
-                            <h3>Total: <span style="margin-left:20px;"> #price</span></h3>
+                            <h3>Total: <span id="total" style="margin-left:20px;">0</span></h3>
                         </div>
                     </fieldset>
                 </form>
