@@ -71,5 +71,26 @@ namespace Pizzeria.Controllers
             provider.CategoryDelete(new MongoDB.Bson.ObjectId(id));
             return Redirect("/Management");
         }
+
+        public ActionResult CreateDeliverer(string name)
+        {
+            MongoDBDataProvider provider = new MongoDBDataProvider();
+            provider.DelivererCreate(name);
+            return Redirect("/Management");
+        }
+
+        public ActionResult ChangeDelivererStatus(string id, bool available)
+        {
+            MongoDBDataProvider provider = new MongoDBDataProvider();
+            provider.DelivererSetAvailable(new MongoDB.Bson.ObjectId(id), available);
+            return Redirect("/Management");
+        }
+
+        public ActionResult MoveorderToHistory(string orderId, string delivererId)
+        {
+            MongoDBDataProvider provider = new MongoDBDataProvider();
+            provider.DelivererDeliver(new MongoDB.Bson.ObjectId(orderId), new MongoDB.Bson.ObjectId(delivererId));
+            return Redirect("/Management");
+        }
     }
 }
