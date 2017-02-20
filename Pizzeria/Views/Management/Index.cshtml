@@ -125,8 +125,8 @@
                             {
                                 <div class="list-group-item clearfix">
                                     <div class="col-lg-10" data-toggle="collapse" data-target="#@deliverer.id">
-                                        <div class="col-lg-8" style="text-decoration: none;">
-                                            <div class="h4"> @deliverer.name</div>
+                                        <div class="col-lg-12" style="text-decoration: none;">
+                                            <div class="h4"> @deliverer.name <span class="badge pull-right">@deliverer.orders.Count</span></div>
                                         </div>
                                     </div>
                                     @if (deliverer.available)
